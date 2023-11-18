@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      picture {
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+        width: 100px;
+      }
+      picture.is-small{
+        width: 50px;
+      }
+      picture.is-large{
+        width: 200px;
+      }
+      img {
+        box-shadow: 0 0 15px #999;
+        border-radius: 50%;
+        width: 100%;
+      }
+      img.disabled {
+        opacity: 0.3;
+      }
+      .divcon{
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        font-size: 24px;
+      }
+    </style>
+    <!--<script
+      src="https://unpkg.com/react@16/umd/react.development.js"
+      crossorigin
+    ></script>
+    <script
+      src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"
+      crossorigin
+    ></script>-->
+    <script
+      src="https://unpkg.com/react@18/umd/react.production.min.js"
+      crossorigin
+    ></script>
+    <script
+      src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"
+      crossorigin
+    ></script>
+    <!--<script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>-->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  </head>
+  <body>
+    <h1>Womens in Tech</h1>
+    <div id="app"></div><!--de crea el que mostrara los componentes-->
+    <script type="text/babel">//script para utilizar babel 
+      const $app = document.getElementById("app");//se crea una variable cosntante para llamar al div por medio del ID 
+      const useState = React.useState;//se llama al useState de React como variable constante
+      //const h = React.createElement;
+
+      //Variable constante LLamada Avatar que se utilizara como el Componente a Renderizar Con ayuda de JSX
+      const Avatar = ({id, name ='.', size}) => {
+        const [enabled, setEnabled] = useState(true);// Desestructuracion de el useState encargado de el estado de Habilitado/Desahabilitado
+        const whitout = `https://randomuser.me/api/portraits/lego/3.jpg`; //variable constante con enlace de imagen predeterminada para usuarios sin Nombre oi no Registrados
+        const src = `https://randomuser.me/api/portraits/women/${id}.jpg`;//variable constante con enlace de imagen predeterminada para simular usuarios (recibe la prop id de Avatar para traer una imagen segun el id ingresado)
+
+        //return h("img",{src});
+        let pictureClassName = '' //variable para cambiar el tamaño de la imagen del usuario de cada componente 
+        if(size === 'small'){//en caso de que el valor sea small(pequeña)
+          pictureClassName = 'is-small'//se le asigna el valor de is-small al añadirse como clase del elemento tomara un tamaño mas pequeño segun las intrucciones del css
+        }else if (size === 'large'){
+          pictureClassName = 'is-large'//se le asigna el valor de is-large al añadirse como clase del elemento tomara un tamaño mas grande segun las intrucciones del css
+        }
+        const imgclassName = enabled ? "" : "disabled";//variable que almacena el valor del usesState que almacena el valor de un if ternario el cual revisa que si la cadena que recibe es vacia o tiene el valor de disabled
+        return (//se le asigna como clase el pictureClassName para que la imagen tome el tamaño indicado por la variable
+          <picture className={pictureClassName}>
+            { id ? (//if ternario que revisa el valor de id, para saber si existe o no un usuario
+            <img
+              onClick={() => setEnabled(!enabled)}// en caso de ser true Actualiza el valor de la consante del useState
+              className={imgclassName}//agrega que contiene la variable imgclassName y lo asinga como la clase del elemento 
+              src={src}//agrega el enlace de la imagen aleatoria para simular el usuario
+            />):
+            (
+              <img 
+              onClick={() => setEnabled(!enabled)}// en caso de ser true Actualiza el valor de la consante del useState
+              className={imgclassName}//agrega que contiene la variable imgclassName y lo asinga como la clase del elemento 
+              src = {whitout}/>//agrega el enlace predeterminado para usuarios no registrados 
+            )}
+            <span>{enabled ? name : "Desactivada"}</span>
+          </picture>
+        );
+      };
+      //Variable constante LLamada Contador que se utilizara como el Componente a Renderizar Con ayuda de JSX
+      function Contador() {
+        //let contadorState = useState(50);
+        //let contador = 50;
+        const [Contador, ContadorState] = useState(50);//useState para el Contador  Inicializado desde 50 porque si 
+        const [Veces,VecesState] = useState(0);//useStat para el Contador de las veces que fue utilizado el contador 
+        return (
+          //div para almacenar los elementos y poder renderizar
+        <div className="divcon">
+            <span>{Contador}</span>
+            <button onClick={ () => {//llmamos al evento onClick
+              ContadorState(Contador +1);//Se catualiza el estado de el Contador en este casi sumandole una unidad 
+              VecesState(Veces +1);//se acutaliza el estado de el contador de veces utilizadas el Contador nomral sumando una unidad por cada click 
+            }}>Boton +</button>
+            <button onClick={ () =>{//llmamos al evento onClick
+              ContadorState(Contador -1);//Se catualiza el estado de el Contador en este casi restandole una unidad 
+              VecesState(Veces +1);//se acutaliza el estado de el contador de veces utilizadas el Contador nomral sumando una unidad por cada click 
+            }}>Boton -</button>
+            <p>Cantidad de veces Acttualizado: {Veces}</p>
+        </div>);
+      }
+      //Metodo para Renderizar los componentes
+      ReactDOM.render(
+        <div>
+          <Avatar id={44} name="Asuka" size="small" />
+          <Avatar id={6} name="Bianca" />
+          <Avatar id={12} name="Raquel" size="large" />
+          <Avatar /><br/><br />
+          <Contador />
+        </div>,
+        $app
+      );
+    </script>
+  </body>
+</html>
